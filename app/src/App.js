@@ -14,39 +14,33 @@ import {
 } from '@aragon/ui'
 
 function App() {
-  /// useAragonApi() returns data needed by the app's contract
-  const { appState } = useAragonApi()
-  const { count, isSyncing } = appState
-
-  return (
-    <Main>
-      {isSyncing && <SyncIndicator />}
-      <Header
-        primary="Counter"
-        secondary={
-          <Text
-            css={`
-              ${textStyle('title2')}
-            `}
-          >
-            {count}
-          </Text>
-        }
-      />
-      <Box
-        css={`
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          text-align: center;
-          height: ${50 * GU}px;
-          ${textStyle('title3')};
-        `}
-      >
-        Count: {count}
-      </Box>
-    </Main>
-  )
-}
+    const { api, appState } = useAragonApi()
+    const { count, isSyncing } = appState
+    const step = 2
+  
+    return (
+      <Main>
+        <Box>
+          <div>
+            <Button
+              display="icon"
+              icon={<IconMinus />}
+              label="Decrement"
+              onClick={() => api.decrement(step).toPromise()}
+            />
+            <Button
+              display="icon"
+              icon={<IconPlus />}
+              label="Increment"
+              onClick={() => api.increment(step).toPromise()}
+              css={`
+                margin-left: ${2 * GU}px;
+              `}
+            />
+          </div>
+        </Box>
+      </Main>
+    )
+  }
 
 export default App
