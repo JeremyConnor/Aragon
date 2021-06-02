@@ -4,6 +4,35 @@ import Aragon, { events } from '@aragon/api'
 
 const app = new Aragon()
 
+app.store(
+    /// event is the event from Web3
+    async (state, { event }) => {
+      const nextState = {
+        ...state,
+      }
+  
+      try {
+        switch (event) {
+          case 'Increment':
+            return { ...nextState, count: await getValue() }
+          case 'Decrement':
+            return { ...nextState, count: await getValue() }
+          case events.SYNC_STATUS_SYNCING:
+            return { ...nextState, isSyncing: true }
+          case events.SYNC_STATUS_SYNCED:
+            return { ...nextState, isSyncing: false }
+          default:
+            return state
+        }
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    {
+      init: initializeState(),
+    }
+)
+
 /***********************
  *   Event Handlers    *
  ***********************/
