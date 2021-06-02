@@ -15,12 +15,20 @@ contract CounterApp is AragonApp {
     /// State
     uint256 public value;
 
-    function increment(uint256 step) external {
+    function initialize(uint256 _initValue) public onlyInit {
+        value = _initValue;
+
+        initialized();
+    }
+
+    /// auth is a modifier defined in AragonApp.sol
+    /// auth checks if the msg.sender has authority to perform certain actions
+    function increment(uint256 step) auth(INCREMENT_ROLE) external {
         value = value.add(step);
         emit Increment(msg.sender, step);
     }
 
-    function decrement(uint256 step) external {
+    function decrement(uint256 step) auth(DECREMENT_ROLE) external {
         value = value.sub(step);
         emit Decrement(msg.sender, step);
     }
